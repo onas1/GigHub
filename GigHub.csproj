@@ -190,6 +190,14 @@
     <Compile Include="Migrations\202107010156376_PopulateGenresTable.Designer.cs">
       <DependentUpon>202107010156376_PopulateGenresTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107012152217_AddForeignKeyPropertiesToGig.cs" />
+    <Compile Include="Migrations\202107012152217_AddForeignKeyPropertiesToGig.Designer.cs">
+      <DependentUpon>202107012152217_AddForeignKeyPropertiesToGig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107012158392_CorrectedArtistId.cs" />
+    <Compile Include="Migrations\202107012158392_CorrectedArtistId.Designer.cs">
+      <DependentUpon>202107012158392_CorrectedArtistId.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -287,6 +295,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107010156376_PopulateGenresTable.resx">
       <DependentUpon>202107010156376_PopulateGenresTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107012152217_AddForeignKeyPropertiesToGig.resx">
+      <DependentUpon>202107012152217_AddForeignKeyPropertiesToGig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107012158392_CorrectedArtistId.resx">
+      <DependentUpon>202107012158392_CorrectedArtistId.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
