@@ -2,6 +2,7 @@
 using System;
 using System.Data.Entity;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace GigHub.Controllers
@@ -15,11 +16,13 @@ namespace GigHub.Controllers
             _context = new ApplicationDbContext();
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var upcomingGigs = _context.Gigs
+            var upcomingGigs = await _context.Gigs
                 .Include(x => x.Artist)
-                .Where(x => x.DateTime > DateTime.Now);
+                .Include(x => x.Genre)
+                .Where(x => x.DateTime < DateTime.Now)
+                .ToListAsync();
             return View(upcomingGigs);
         }
 
