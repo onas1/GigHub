@@ -22,7 +22,7 @@ namespace GigHub.Controllers
             var upcomingGigs = await _context.Gigs
                 .Include(x => x.Artist)
                 .Include(x => x.Genre)
-                .Where(x => x.DateTime < DateTime.Now)
+                .Where(x => x.DateTime > DateTime.Now)
                 .ToListAsync();
 
             var viewModel = new GigsViewModel

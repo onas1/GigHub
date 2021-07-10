@@ -8,7 +8,7 @@ using System.Web.Http;
 namespace GigHub.Controllers
 {
 
-    [Authorize]
+
     public class AttendancesController : ApiController
     {
         private readonly ApplicationDbContext _context;
@@ -17,11 +17,13 @@ namespace GigHub.Controllers
             _context = new ApplicationDbContext();
         }
         [HttpPost]
+        [Authorize]
         public IHttpActionResult Attend(AttendanceDto dto)
         {
             var userId = User.Identity.GetUserId();
 
-            if (_context.Attendances.Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
+            if (_context.Attendances
+                .Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
             {
                 return BadRequest("The attendance already exists.");
             }
