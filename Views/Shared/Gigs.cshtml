@@ -4,7 +4,18 @@
 }
 
 <h1>@Model.Heading</h1>
-<ul class="gigs voffset4">
+@using (Html.BeginForm("search", "Gigs"))
+            {
+<div class="form-group">
+    <div id="searchGigs" class="input-group">
+        @Html.TextBoxFor(m => m.SearchTerm, new { @class = "form-control", @placeholder = "Search by artist, genre ... " })
+        <span class="input-group-addon">
+            <i class="glyphicon glyphicon-search"></i>
+        </span>
+    </div>
+</div>
+            }
+<ul id="gigs" class="gigs voffset4">
     @foreach (var gig in Model.UpcomingGigs)
     {
       <li>
@@ -19,20 +30,26 @@
         <div class="details">
             <div>
                 <span class="artist">
-                    @gig.Artist.Name
-                    @if(Model.ShowActions)
-                    {
-                        <button class="btn btn-link btn-sm js-toggle-follow" data-user-id="@gig.ArtistId">Follow</button>
+                    <a href="@Url.Action("Details", "Gigs", new { id = gig.Id})">
+                        @gig.Artist.Name
+                    </a>
+                    @if (gig.IsCanceled) {
+                    <span class="label label-warning">Canceled</span>
                     }
                 </span>
             </div>
             <span class="genre">
                 @gig.Genre.Name
             </span>
-            @if(Model.ShowActions)
+            @if(Model.ShowActions && gig.IsCanceled==false)
             {
 
-                <button data-gig-id="@gig.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
+                <button 
+                        data-gig-id="@gig.Id" class="btn 
+                        @(Model.Attendances.Contains(gig.Id)? "btn-info" : "btn-default")
+                        btn-sm pull-right js-toggle-attendance">
+            Going?
+                </button>
             }
         </div>
       </li>
@@ -43,32 +60,7 @@
 {
 <script>
     $(document).ready(function () {
-        $(".js-toggle-attendance").click(function (e) {
-            var button = $(e.target);
-            $.post("/api/attendances", { gigId: button.attr("data-gig-id") })
-                .done(function () {
-                    button
-                        .removeClass("btn-default")
-                        .addClass("btn-info")
-                        .text("Going")
-                })
-                .fail(function () {
-                    alert("Something failed");
-                });
-            
-        });
-
-        $(".js-toggle-follow").click(function (e) {
-            var button = $(e.target);
-            $.post("Api/following", { followeeId: button.attr("data-user-id") })
-                .done(function () {
-                    button.text("Following");
-                })
-                .fail(function () {
-                    alert("something failed");
-                });
-
-        });
+        GigsController.init("#gigs");
     });
     </script>
 

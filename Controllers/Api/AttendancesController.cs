@@ -5,9 +5,8 @@ using System.Linq;
 using System.Web.Http;
 
 
-namespace GigHub.Controllers
+namespace GigHub.Controllers.Api
 {
-
 
     public class AttendancesController : ApiController
     {
@@ -35,6 +34,21 @@ namespace GigHub.Controllers
             _context.Attendances.Add(attendance);
             _context.SaveChanges();
             return Ok();
+        }
+
+        [HttpDelete]
+        [Authorize]
+        public IHttpActionResult DeleteAttendance(int Id)
+        {
+            var userId = User.Identity.GetUserId();
+            var attendanace = _context.Attendances.SingleOrDefault(a => a.GigId == Id && a.AttendeeId == userId);
+
+            if (attendanace == null)
+                return NotFound();
+
+            var result = _context.Attendances.Remove(attendanace);
+            _context.SaveChanges();
+            return Ok(Id);
         }
     }
 }

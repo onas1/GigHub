@@ -14,7 +14,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GigHub</RootNamespace>
     <AssemblyName>GigHub</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -174,16 +177,39 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\MappingProfile.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\GigsController.cs" />
+    <Compile Include="ViewModels\GigDetailsViewModel.cs" />
+    <Compile Include="Dtos\GenreDto.cs" />
+    <Compile Include="Dtos\GigDto.cs" />
+    <Compile Include="Dtos\NotificationDto.cs" />
+    <Compile Include="Controllers\Api\NotificationsController.cs" />
     <Compile Include="Controllers\FolloweeController.cs" />
-    <Compile Include="Controllers\FollowingController.cs" />
+    <Compile Include="Controllers\Api\FollowingController.cs" />
+    <Compile Include="Dtos\UserDto.cs" />
+    <Compile Include="Migrations\202107101743357_AddIsCanceledToGig.cs" />
+    <Compile Include="Migrations\202107101743357_AddIsCanceledToGig.Designer.cs">
+      <DependentUpon>202107101743357_AddIsCanceledToGig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107102111386_AddNotification.cs" />
+    <Compile Include="Migrations\202107102111386_AddNotification.Designer.cs">
+      <DependentUpon>202107102111386_AddNotification.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107261602095_changvaluetovenue.cs" />
+    <Compile Include="Migrations\202107261602095_changvaluetovenue.Designer.cs">
+      <DependentUpon>202107261602095_changvaluetovenue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\UserNotification.cs" />
     <Compile Include="ViewModels\GigsViewModel.cs" />
     <Compile Include="Dtos\FollowingDto.cs" />
     <Compile Include="Dtos\AttendanceDto.cs" />
-    <Compile Include="Controllers\AttendancesController.cs" />
+    <Compile Include="Controllers\Api\AttendancesController.cs" />
     <Compile Include="Controllers\GigsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -257,16 +283,42 @@
     <Compile Include="ViewModels\VerifyPhoneNumberViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\animate.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css">
+      <DependentUpon>Site.less</DependentUpon>
+    </Content>
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <None Include="Content\Site.less" />
+    <Content Include="lib\animate.css\animate.compat.css" />
+    <Content Include="lib\animate.css\animate.compat.min.css" />
+    <Content Include="lib\animate.css\animate.css" />
+    <Content Include="lib\animate.css\animate.min.css" />
+    <Content Include="lib\underscore.js\underscore-min.js" />
+    <Content Include="lib\underscore.js\underscore.js" />
+    <Content Include="Scripts\app\app.js" />
+    <Content Include="Scripts\app\Controllers\gigDetailsController.js" />
+    <Content Include="Scripts\app\Controllers\gigsController.js" />
+    <Content Include="Scripts\app\Services\attendanceService.js" />
+    <Content Include="Scripts\app\Services\followingService.js" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="libman.json" />
+    <Content Include="lib\underscore.js\underscore-min.map" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -278,6 +330,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\underscore-min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -315,6 +368,7 @@
     <Content Include="Views\Gigs\GigForm.cshtml" />
     <Content Include="Views\Followee\Index.cshtml" />
     <Content Include="Views\Gigs\Mine.cshtml" />
+    <Content Include="Views\Gigs\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -359,6 +413,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107041032188_AddFollowing.resx">
       <DependentUpon>202107041032188_AddFollowing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107101743357_AddIsCanceledToGig.resx">
+      <DependentUpon>202107101743357_AddIsCanceledToGig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107102111386_AddNotification.resx">
+      <DependentUpon>202107102111386_AddNotification.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107261602095_changvaluetovenue.resx">
+      <DependentUpon>202107261602095_changvaluetovenue.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
