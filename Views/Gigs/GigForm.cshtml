@@ -1,4 +1,4 @@
-﻿@model GigHub.ViewModels.GigFormViewModel
+﻿@model GigHub.Core.ViewModels.GigFormViewModel
 @{
     ViewBag.Title = Model.Heading;
 }
@@ -8,7 +8,7 @@
 {
     <p class="alert alert-info">All fields are <strong>required</strong>.</p>
     @Html.AntiForgeryToken();
-    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Id);
     <div class="form-group">
         @Html.LabelFor(x => x.Venue)
         @Html.TextBoxFor(x => x.Venue, new { @class = "form-control", autofocus = "autofocus"})

@@ -1,14 +1,14 @@
 ﻿
 var FollowingService = function () {
     var createFollowing = function (followeeId, done, fail) {
-        $.post("api/followings", { followeeId: followeeId })
+        $.post("/api/following", { followeeId: followeeId })
             .done(done)
             .fail(fail);
     };
 
     var deleteFollowing = function (followeeId, done, fail) {
         $.ajax({
-            url: "/api/followings" + followeeId,
+            url: "/api/following/" + followeeId,
             method: "DELETE"
         }).done(done)
             .fail(fail);

@@ -1,19 +1,19 @@
-﻿using GigHub.Dtos;
-using GigHub.Models;
+﻿using GigHub.Core;
+using GigHub.Core.Models;
+using GigHub.Dtos;
 using Microsoft.AspNet.Identity;
-using System.Linq;
 using System.Web.Http;
-
 
 namespace GigHub.Controllers.Api
 {
 
     public class AttendancesController : ApiController
     {
-        private readonly ApplicationDbContext _context;
-        public AttendancesController()
+        private readonly IUnitOfWork _unitOfWork;
+        public AttendancesController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
+            _unitOfWork = unitOfWork;
+
         }
         [HttpPost]
         [Authorize]
@@ -21,8 +21,8 @@ namespace GigHub.Controllers.Api
         {
             var userId = User.Identity.GetUserId();
 
-            if (_context.Attendances
-                .Any(a => a.AttendeeId == userId && a.GigId == dto.GigId))
+
+            if (_unitOfWork.Attendances.GetAttendances(dto.GigId, userId) != null)
             {
                 return BadRequest("The attendance already exists.");
             }
@@ -31,8 +31,9 @@ namespace GigHub.Controllers.Api
                 GigId = dto.GigId,
                 AttendeeId = userId
             };
-            _context.Attendances.Add(attendance);
-            _context.SaveChanges();
+
+            _unitOfWork.Attendances.Add(attendance);
+            _unitOfWork.Complete();
             return Ok();
         }
 
@@ -40,14 +41,13 @@ namespace GigHub.Controllers.Api
         [Authorize]
         public IHttpActionResult DeleteAttendance(int Id)
         {
-            var userId = User.Identity.GetUserId();
-            var attendanace = _context.Attendances.SingleOrDefault(a => a.GigId == Id && a.AttendeeId == userId);
+            Attendance attendanace = _unitOfWork.Attendances.GetAttendances(Id, User.Identity.GetUserId());
 
             if (attendanace == null)
                 return NotFound();
 
-            var result = _context.Attendances.Remove(attendanace);
-            _context.SaveChanges();
+            _unitOfWork.Attendances.Remove(attendanace);
+            _unitOfWork.Complete();
             return Ok(Id);
         }
     }

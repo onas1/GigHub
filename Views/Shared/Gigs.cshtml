@@ -1,4 +1,6 @@
-﻿@model GigHub.ViewModels.GigsViewModel
+﻿@model GigHub.Core.ViewModels.GigsViewModel
+
+.GigsViewModel
 @{
     ViewBag.Title = "Home Page";
 }
@@ -30,7 +32,7 @@
         <div class="details">
             <div>
                 <span class="artist">
-                    <a href="@Url.Action("Details", "Gigs", new { id = gig.Id})">
+                    <a href="@Url.Action("Details", "Gigs", new {id = gig.Id})">
                         @gig.Artist.Name
                     </a>
                     @if (gig.IsCanceled) {
